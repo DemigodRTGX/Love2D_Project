@@ -1,0 +1,1 @@
+splashscreentime = 2
