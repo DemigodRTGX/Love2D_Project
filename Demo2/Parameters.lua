@@ -31,7 +31,7 @@ canShoot = true
 canShootTimerMax = 0.2
 canShootTimer = canShootTimerMax
 
-bullets = {img = nil, x = 0, y = 0, speed = 400,s = 2}
+bullets = {img = nil, x = 0, y = 0, speed = 400, s = 2}
 
 createEnemyTimerMax = 1
 createEnemyTimer = createEnemyTimerMax
@@ -44,3 +44,5 @@ DamageScreentimer = DamageScreentimerMax
 showCollider = false
 
 Backgroundtimer = 0.5
+
+fireparticlesize = {min = -200, max = -700}

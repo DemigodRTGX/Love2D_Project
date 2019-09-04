@@ -8,7 +8,7 @@ function love.load(arg)
     Background.img = love.graphics.newImage('asset/background02.png')
     Background.img:setWrap('repeat', 'repeat')
     BackgroundStone.img = {
-       -- love.graphics.newImage('asset/stone01.png'),
+        -- love.graphics.newImage('asset/stone01.png'),
         love.graphics.newImage('asset/stone02.png'),
         love.graphics.newImage('asset/stone03.png')
     }
@@ -20,6 +20,16 @@ function love.load(arg)
     bullets.img = love.graphics.newImage('asset/bullet.png')
     enemie1.img = love.graphics.newImage('asset/enemie1.png')
 
+    --particle
+    local img = love.graphics.newImage('asset/fireparticle.png')
+
+    psystem = love.graphics.newParticleSystem(img, 32)
+    psystem:setParticleLifetime(0.2, 0.3) -- Particles live at least 2s and at most 5s.
+    psystem:setEmissionRate(40)
+    psystem:setSizeVariation(0)
+    psystem:setLinearAcceleration(fireparticlesize.min, 0, fireparticlesize.max, 0) -- Random movement in all directions.
+    psystem:setColors(1, 1, 1, 1, 1, 1, 1, 0) -- Fade to transparency.
+    --
     Backgrondshader()
     uv_x_move = 0
 
@@ -40,6 +50,7 @@ function love.update(dt)
 
     if isPause == false then
         Playrmove(dt)
+        psystem:update(dt)
 
         uv_x_move = love.timer.getTime() * Background.speed
         uv_x_move = uv_x_move - math.floor(uv_x_move)
@@ -54,7 +65,6 @@ function love.update(dt)
         createEnemyTimerMax = 1 - Player.score / 500
         DamageScreenUpdate(dt)
         BackGroundUpdate(dt)
-
     end
 end
 
@@ -63,6 +73,7 @@ function love.draw()
     bulletDraw()
     PlayerDraw(Player)
     enemieDraw()
+    love.graphics.draw(psystem, Player.x+2,  Player.y+12)
 
     DamageScreenDraw()
 

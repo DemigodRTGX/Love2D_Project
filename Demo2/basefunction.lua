@@ -22,8 +22,8 @@ function BackgroundDraw(Background)
         end
     end
 
---    love.graphics.print(#newBackGroundStoneRender, 0, 50)
---    love.graphics.print(Backgroundtimer, 0, 60)
+    --    love.graphics.print(#newBackGroundStoneRender, 0, 50)
+    --    love.graphics.print(Backgroundtimer, 0, 60)
 end
 newBackGroundStoneRender = {}
 function newBackGroundStone(BackgroundStone)
@@ -52,9 +52,18 @@ function Playrmove(dt)
     --x
     if love.keyboard.isDown('left') then
         Player.x = Player.x - Player.speed * dt
+        fireparticlesize.max = -300
+        fireparticlesize.min = -100
     elseif love.keyboard.isDown('right') then
         Player.x = Player.x + Player.speed * dt
+        fireparticlesize.max = -1400
+        fireparticlesize.min = -400
+    else
+        fireparticlesize.max = -700
+        fireparticlesize.min = -200
     end
+    psystem:setLinearAcceleration(fireparticlesize.min, 0, fireparticlesize.max, 0)
+
     --lim x
     if Player.x <= 0 then
         Player.x = 0
@@ -77,15 +86,19 @@ function PlayerDraw(Player)
 end
 
 bulletsRenderlist = {}
-function newbullets(bullets)
-    newbullet = {}
-    newbullet.img = bullets.img
-    newbullet.x = Player.x + Player.colliderX - 5
-    newbullet.y = Player.y + Player.colliderY - 5
-    newbullet.speed = bullets.speed
-    newbullet.s = bullets.s
+
+function FireAudioPlay()
     love.audio.stop(fireaudio)
     love.audio.play(fireaudio)
+end
+function newbullets(bullets, x, y)
+    newbullet = {}
+    newbullet.img = bullets.img
+    newbullet.x = Player.x + Player.colliderX - x
+    newbullet.y = Player.y + Player.colliderY - y
+    newbullet.speed = bullets.speed
+    newbullet.s = bullets.s
+
     table.insert(bulletsRenderlist, newbullet)
 end
 
@@ -120,7 +133,19 @@ end
 
 function menu(dt)
     if love.keyboard.isDown('j', 'k') and canShoot and isPause == false then
-        newbullets(bullets)
+        if Player.score < 200 then
+            newbullets(bullets, 5, 5)
+        elseif Player.score < 400 then
+            newbullets(bullets, 5, 5)
+            newbullets(bullets, 5, 12)
+        else
+            newbullets(bullets, 5, 5)
+            newbullets(bullets, 5, 12)
+
+            newbullets(bullets, 5, 19)
+        end
+        FireAudioPlay()
+
         canShoot = false
     end
 
