@@ -65,9 +65,8 @@ end
 
 fadesintimer = 0
 function TweenUIimg:fadesin(dt, fadetime)
-    fadesintimer = fadesintimer + dt* fadetime
-   --fadesintimer = math.sin(fadesintimer) 
-   -- print(math.sin(fadesintimer))
+    fadesintimer = fadesintimer + dt * fadetime
+    --fadesintimer = math.sin(fadesintimer)
+    -- print(math.sin(fadesintimer))
     self.fadetime = math.abs(math.sin(fadesintimer))
 end
-
