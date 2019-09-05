@@ -7,6 +7,9 @@ function love.load(arg)
 
     Background.img = love.graphics.newImage('asset/background02.png')
     Background.img:setWrap('repeat', 'repeat')
+    Background.img2 = love.graphics.newImage('asset/background01.png')
+    Background.img2:setWrap('repeat', 'repeat')
+
     BackgroundStone.img = {
         -- love.graphics.newImage('asset/stone01.png'),
         love.graphics.newImage('asset/stone02.png'),
@@ -19,6 +22,7 @@ function love.load(arg)
 
     bullets.img = love.graphics.newImage('asset/bullet.png')
     enemie1.img = love.graphics.newImage('asset/enemie1.png')
+    damageScreenimg = love.graphics.newImage('asset/Damage.png')
 
     --particle
     local img = love.graphics.newImage('asset/fireparticle.png')
@@ -42,8 +46,11 @@ function love.load(arg)
     IsDamageScreen = false
 
     isPause = false
+    bgspeed = Background.speed
+
 end
 
+bgtime = 0
 function love.update(dt)
     menu(dt)
     Damege()
@@ -51,8 +58,8 @@ function love.update(dt)
     if isPause == false then
         Playrmove(dt)
         psystem:update(dt)
-
-        uv_x_move = love.timer.getTime() * Background.speed
+        bgtime = bgtime + dt * bgspeed
+        uv_x_move = bgtime
         uv_x_move = uv_x_move - math.floor(uv_x_move)
 
         bulletfire(bullets, dt)
@@ -73,7 +80,7 @@ function love.draw()
     bulletDraw()
     PlayerDraw(Player)
     enemieDraw()
-    love.graphics.draw(psystem, Player.x+2,  Player.y+12)
+    love.graphics.draw(psystem, Player.x + 2, Player.y + 12)
 
     DamageScreenDraw()
 

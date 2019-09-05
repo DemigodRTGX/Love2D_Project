@@ -8,8 +8,8 @@ function Damege()
             CheckCollision(
                 enemy.x,
                 enemy.y,
-                enemy.img:getWidth()*enemy.sx,
-                enemy.img:getHeight()*enemy.sy,
+                enemy.img:getWidth() * enemy.sx,
+                enemy.img:getHeight() * enemy.sy,
                 Player.x,
                 Player.y,
                 Player.colliderX,
@@ -28,12 +28,12 @@ function Damege()
                 CheckCollision(
                     enemy.x,
                     enemy.y,
-                    enemy.img:getWidth()*enemy.sx,
-                    enemy.img:getHeight()*enemy.sy,
+                    enemy.img:getWidth() * enemy.sx,
+                    enemy.img:getHeight() * enemy.sy,
                     bullet.x,
                     bullet.y,
                     bullet.img:getWidth() / bullet.s,
-                    bullet.img:getHeight() /  bullet.s
+                    bullet.img:getHeight() / bullet.s
                 )
              then
                 table.remove(bulletsRenderlist, j)
@@ -55,7 +55,7 @@ function DamageScreenUpdate(dt)
     if IsDamageScreen == true then
         DamageScreentimer = DamageScreentimer - dt
     end
-    if DamageScreentimer < 0 then
+    if DamageScreentimer <= 0 then
         IsDamageScreen = false
         DamageScreentimer = DamageScreentimerMax
     end
@@ -63,13 +63,6 @@ end
 
 function DamageScreenDraw()
     if IsDamageScreen == true then
-        love.graphics.setColor(1, 0, 0, 0.6)
-        love.graphics.rectangle('fill', 0, 0, 320, 240)
-        end
-    if IsDamageScreen == false or gameover == true then
-        love.graphics.setColor(1, 1, 1, 1)
-    --   love.graphics.print('false')
+        love.graphics.draw(damageScreenimg)
     end
-
-    --  love.graphics.print(DamageScreentimer,0,50)
 end

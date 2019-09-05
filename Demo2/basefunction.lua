@@ -15,6 +15,11 @@ function BackgroundDraw(Background)
     love.graphics.draw(Background.img)
     love.graphics.setShader()
 
+    love.graphics.setShader(bgShader)
+    bgShader:send('Time', uv_x_move * 2)
+    love.graphics.draw(Background.img2)
+    love.graphics.setShader()
+
     for i, v in ipairs(newBackGroundStoneRender) do
         love.graphics.draw(v.img, v.x, v.y, v.r, v.sx, v.sy)
         if v.x < -10 then
@@ -42,6 +47,7 @@ function newBackGroundStone(BackgroundStone)
     table.insert(newBackGroundStoneRender, newBackGroundStonelist)
 end
 
+
 function Playrmove(dt)
     --y
     if love.keyboard.isDown('up') then
@@ -54,13 +60,16 @@ function Playrmove(dt)
         Player.x = Player.x - Player.speed * dt
         fireparticlesize.max = -300
         fireparticlesize.min = -100
+        bgspeed = Background.speed * 0.8
     elseif love.keyboard.isDown('right') then
         Player.x = Player.x + Player.speed * dt
         fireparticlesize.max = -1400
         fireparticlesize.min = -400
+        bgspeed = Background.speed * 1.2
     else
         fireparticlesize.max = -700
         fireparticlesize.min = -200
+        bgspeed = Background.speed
     end
     psystem:setLinearAcceleration(fireparticlesize.min, 0, fireparticlesize.max, 0)
 

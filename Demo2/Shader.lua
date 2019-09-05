@@ -21,5 +21,4 @@ function Backgrondshader()
 ]]
 
     bgShader = love.graphics.newShader(pixelcode)
-    
 end

@@ -16,3 +16,19 @@ function floatdistacne(x, y)
         return false
     end
 end
+
+function ToggleTime(time)
+    if gametime < time then
+        return true
+    else
+        return false
+    end
+end
+
+function DrawFont(text, x, y, size, r, g, b, a)
+    font = love.graphics.newFont(size)
+    love.graphics.setFont(font)
+    love.graphics.setColor(r, g, b, a)
+    love.graphics.print(text, x, y)
+    love.graphics.setColor(1, 1, 1, 1)
+end

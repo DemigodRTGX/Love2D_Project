@@ -15,11 +15,11 @@ Player = {
 
 Background = {
     img = nil,
-    speed = 0.2
+    speed = 0.1
 }
 BackgroundStone = {
     img = {},
-    speed = 200,
+    speed = 150,
     x = 0,
     y = 0,
     sx = 1,

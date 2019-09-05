@@ -1,4 +1,4 @@
-TweenUIimg = {imgpath = nil, x = 0, y = 0, r = 0, sx = 1, sy = 1, fadetime = 0}
+TweenUIimg = {img = nil, x = 0, y = 0, r = 0, sx = 1, sy = 1, fadetime = 0}
 function TweenUIimg:new(imgpath, x, y, r, sx, sy)
     o = {}
     setmetatable(o, {__index = self})
@@ -11,22 +11,25 @@ function TweenUIimg:new(imgpath, x, y, r, sx, sy)
     o.fadetime = 0
     return o
 end
-
-local d = 0
-local fade = 1
+function TweenUIimg:wait()
+end
+d = 0
 function TweenUIimg:fade(dt, fadetime)
-    d = d + dt
-    d = math.min(fadetime, d)
-    fade = math.abs(math.sin(d)) * fadetime
+    d = d + dt * fadetime
+    d = math.min(1, d)
+
+    self.fadetime = d
+
+    --print(self.fadetime)
 end
 
 function TweenUIimg:translate(dt, x, y)
-    TweenUIimg.x = TweenUIimg.x + x * dt
-    TweenUIimg.y = TweenUIimg.y + y * dt
+    self.x = self.x + x * dt
+    self.y = self.y + y * dt
 end
 
 function TweenUIimg:rotate(dt, r)
-    TweenUIimg.r = TweenUIimg.r + r * dt
+    self.r = self.r + r * dt
 end
 
 function TweenUIimg:MoveTo(dt, x, y, speedX, speedY)
@@ -37,12 +40,12 @@ function TweenUIimg:MoveTo(dt, x, y, speedX, speedY)
         self.y = self.y + dt * speedY
     end
 
-    print(math.abs(self.y - y))
+    --  print(math.abs(self.y - y))
 end
 
 function TweenUIimg:Scale(dt, sx, sy)
-    TweenUIimg.sx = TweenUIimg.sx + sx * dt
-    TweenUIimg.sy = TweenUIimg.sy + sy * dt
+    self.sx = self.sx + sx * dt
+    self.sy = self.sy + sy * dt
 end
 
 function TweenUIimg:SetPosition(x, y)
@@ -56,6 +59,15 @@ function TweenUIimg:draw()
 end
 
 function TweenUIimg:drawfade()
-    love.graphics.setColor(1, 1, 1, fade)
+    love.graphics.setColor(1, 1, 1, self.fadetime)
     love.graphics.draw(self.img, self.x, self.y, self.r, self.sx, self.sy)
 end
+
+fadesintimer = 0
+function TweenUIimg:fadesin(dt, fadetime)
+    fadesintimer = fadesintimer + dt* fadetime
+   --fadesintimer = math.sin(fadesintimer) 
+   -- print(math.sin(fadesintimer))
+    self.fadetime = math.abs(math.sin(fadesintimer))
+end
+
