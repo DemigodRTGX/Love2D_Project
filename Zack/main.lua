@@ -17,7 +17,9 @@ end
 
 function love.draw()
     for k, Component in pairs(Components) do
-        Component:draw();
+        if Component.enabled then
+            Component:draw();
+        end
     end
 end
 
@@ -30,12 +32,16 @@ function love.keypressed(key)
         qteView.enabled = not qteView.enabled;
      end
     for k, Component in pairs(Components) do
-        Component:keypressed(key);
+        if Component.enabled then
+            Component:keypressed(key);
+        end
     end
 end
 
 function love.update(dt)
     for k, Component in pairs(Components) do
-        Component:update(dt);
+        if Component.enabled then
+            Component:update(dt);
+        end
     end
 end

@@ -2,7 +2,7 @@ local qteView = {}
 qteView.enabled = true;
 qteView.QTETime = 7
 qteView.keys={"up","down","left","right"};
-qteView.keys_tail = {"a","k"};
+qteView.keys_tail = {"j","k"};
 qteView.keyImages_tail={"assets/A.png","assets/B.png"}
 qteView.pressedImages_tail={"assets/A_g.png","assets/B_g.png"}
 qteView.keyImages = {"assets/up.png","assets/down.png","assets/left.png","assets/right.png"}
@@ -97,9 +97,6 @@ function qteView:draw()
 end
 
 function qteView:keypressed(key)
-    if not qteView.enabled then
-        return
-    end
     if key == "rctrl" then --set to whatever key you want to use
         debug.debug()
      end
@@ -127,9 +124,6 @@ end
 
 qteView.leftTime = qteView.QTETime;
 function qteView:update(dt)
-    if not qteView.enabled then
-        return
-    end
     qteView.leftTime = qteView.leftTime - dt;
     if qteView.leftTime < 0 then
         qteView:failed()
