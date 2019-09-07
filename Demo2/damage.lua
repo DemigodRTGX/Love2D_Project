@@ -17,10 +17,9 @@ function Damege()
             )
          then
             love.audio.stop(enemyDeadaudio)
-
             love.audio.play(enemyDeadaudio)
             table.remove(enemie1renderlist, i)
-            Player.hp = Player.hp - 1
+            Player.hp = Player.hp - enemy.damage
             IsDamageScreen = true
         end
         for j, bullet in ipairs(bulletsRenderlist) do
@@ -36,8 +35,10 @@ function Damege()
                     bullet.img:getHeight() / bullet.s
                 )
              then
-                table.remove(bulletsRenderlist, j)
-                enemy.hp = enemy.hp - Player.damge
+                if enemy.id <= 3 then
+                    table.remove(bulletsRenderlist, j)
+                    enemy.hp = enemy.hp - Player.damge
+                end
 
                 if enemy.hp < 0 then
                     Player.score = Player.score + 10

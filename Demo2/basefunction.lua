@@ -6,6 +6,9 @@ function BackGroundUpdate(dt)
     end
     for i, v in ipairs(newBackGroundStoneRender) do
         v.x = v.x - dt * v.speed
+        if v.x < -320 then
+            table.remove(newBackGroundStoneRender, i)
+        end
     end
 end
 
@@ -14,21 +17,15 @@ function BackgroundDraw(Background)
     bgShader:send('Time', uv_x_move)
     love.graphics.draw(Background.img)
     love.graphics.setShader()
+    
+    for i, v in ipairs(newBackGroundStoneRender) do
+        love.graphics.draw(v.img, v.x, v.y, v.r, v.sx, v.sy)
+    end
 
     love.graphics.setShader(bgShader)
     bgShader:send('Time', uv_x_move * 2)
     love.graphics.draw(Background.img2)
     love.graphics.setShader()
-
-    for i, v in ipairs(newBackGroundStoneRender) do
-        love.graphics.draw(v.img, v.x, v.y, v.r, v.sx, v.sy)
-        if v.x < -10 then
-            table.remove(newBackGroundStoneRender, i)
-        end
-    end
-
-    --    love.graphics.print(#newBackGroundStoneRender, 0, 50)
-    --    love.graphics.print(Backgroundtimer, 0, 60)
 end
 newBackGroundStoneRender = {}
 function newBackGroundStone(BackgroundStone)
@@ -46,7 +43,6 @@ function newBackGroundStone(BackgroundStone)
     newBackGroundStonelist.speed = love.math.random(50, BackgroundStone.speed)
     table.insert(newBackGroundStoneRender, newBackGroundStonelist)
 end
-
 
 function Playrmove(dt)
     --y
@@ -143,15 +139,26 @@ end
 function menu(dt)
     if love.keyboard.isDown('j', 'k') and canShoot and isPause == false then
         if Player.score < 200 then
-            newbullets(bullets, 5, 5)
+            newbullets(bullets, 8, 14)
         elseif Player.score < 400 then
-            newbullets(bullets, 5, 5)
-            newbullets(bullets, 5, 12)
-        else
-            newbullets(bullets, 5, 5)
-            newbullets(bullets, 5, 12)
+            -- levelup = true
+            if levelupID == 1 then
+                levelupAudio()
+                levelupID = levelupID + 1
+            end
 
-            newbullets(bullets, 5, 19)
+            newbullets(bullets, 8, 8)
+            newbullets(bullets, 8, 14)
+        else
+            levelup = true
+            if levelupID == 2 then
+                levelupAudio()
+                levelupID = levelupID + 1
+            end
+
+            newbullets(bullets, 8, 8)
+            newbullets(bullets, 8, 14)
+            newbullets(bullets, 8, 20)
         end
         FireAudioPlay()
 
@@ -244,4 +251,24 @@ function love.keyreleased(key)
     if key == 'r' then
         IsReset = true
     end
+end
+
+--levelup = false
+levelupID = 1
+function levelupAudio()
+    love.audio.play(restartaudio)
+    -- levelup = false
+end
+
+function loadpatricle()
+    --particle Player
+    local img = love.graphics.newImage('asset/fireparticle.png')
+    psystem = love.graphics.newParticleSystem(img, 32)
+    psystem:setParticleLifetime(0.2, 0.3) -- Particles live at least 2s and at most 5s.
+    psystem:setEmissionRate(40)
+    psystem:setSizeVariation(0)
+    psystem:setLinearAcceleration(fireparticlesize.min, 0, fireparticlesize.max, 0) -- Random movement in all directions.
+    psystem:setColors(1, 1, 1, 1, 1, 1, 1, 0) -- Fade to transparency.
+    --
+    enemyimg = love.graphics.newImage('asset/fireparticle_enemy.png')
 end
