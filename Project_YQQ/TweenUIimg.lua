@@ -13,6 +13,11 @@ function TweenUIimg:new(imgpath, x, y, r, sx, sy)
 end
 function TweenUIimg:wait()
 end
+
+function TweenUIimg:replace(img)
+    self.img = img
+end
+
 d = 0
 function TweenUIimg:fade(dt, fadetime)
     d = d + dt * fadetime

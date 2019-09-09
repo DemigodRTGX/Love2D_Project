@@ -2,7 +2,7 @@ local startgameComponents = {}
 startgameComponents.enable = true
 
 function startgameComponents:load(arg)
-    Components["qte"].enabled = false
+    Components['qte'].enabled = false
     assert(love.filesystem.load('TweenUIimg.lua'))()
     assert(love.filesystem.load('basefunction.lua'))()
     assert(love.filesystem.load('parameters.lua'))()
@@ -12,7 +12,8 @@ function startgameComponents:load(arg)
 
     StartBG = TweenUIimg:new('assets/img/StartBG.png', 0, 0, 0, 1, 1)
     Shift = TweenUIimg:new('assets/img/Shift.png', 0, 245, 0, 1, 1)
-    PressStart = TweenUIimg:new('assets/img/PressStart.png', 0, 0, 0, 1, 1)
+    PressStart = TweenUIimg:new('assets/img/CREDITS.png', 0, 0, 0, 1, 1)
+    CREDITSimg = love.graphics.newImage('assets/img/PressStart.png')
 
     StartGameAnimation = true
     LoginScreen = false
@@ -82,22 +83,22 @@ function startgameComponents:keypressed(k)
     if k == 'escape' then
         love.event.push('quit')
     end
-    if k == 'space' and LoginScreen == true then
+    if k == 'return' and LoginScreen == true then
         CREDITSAudio = AudioManager:new('assets/audio/CREDITSAudio.mp3', 'static')
-
         CREDITSAudio:PlayAudio()
         CREDITS = CREDITS + 1
+        PressStart:replace(CREDITSimg)
     end
-    if k == 'return' and CREDITS > 0 then
+    if k == 'j' and CREDITS > 0 then
         LoginScreen = false
         Store = true
-         Components["qte"].enabled = true
+        Components['qte'].enabled = true
     end
 end
 gametime = 0
 function timer(dt)
     gametime = gametime + dt
-    print(gametime)
+    --  print(gametime)
 end
 
 return startgameComponents
