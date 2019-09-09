@@ -1,52 +1,46 @@
-function love.load(arg)
-    assert(love.filesystem.load('TweenUIimg.lua'))()
-    assert(love.filesystem.load('basefunction.lua'))()
-    assert(love.filesystem.load('parameters.lua'))()
-    -- RenderUIimg = require('bias')
-    zhonggao = TweenUIimg:new('asset/img/youxizhonggao.png', 0, 0, 0, 1, 1)
-    StartBG = TweenUIimg:new('asset/img/StartBG.png', 0, -240, 0, 1, 1)
-end
+-- menu==escape
+-- y=i
+-- a=j
+-- x=u
+-- b=k
+-- select=space
+-- start=return
+local qteView = require("qte")
+local testcomponents = require("test")
+local startgameComponents = require('startgame')
 
-function love.update(dt)
-    splashscreentime = DelayTimer(dt, splashscreentime)
-    if splashscreentime <= 0 then
-        StartBG:MoveTo(dt, 0, 0, 0, 200)
-    else
-        zhonggao:fade(dt, splashscreentime)
+Components = {}
+Components["qte"] = qteView
+--Components["test"] = testcomponents
+Components["startgame"] = startgameComponents
+
+function love.load()
+    for k, Component in pairs(Components) do
+        Component:load();
     end
 end
 
 function love.draw()
-    if splashscreentime <= 0 then
-        StartBG:draw()
-    else
-        zhonggao:drawfade()
+    for k, Component in pairs(Components) do
+        Component:draw();
     end
 end
 
-function love.keypressed(k)
-    if k == 'escape' then
-        love.event.push('quit')
+function love.keypressed(key)
+    if key == "escape" then
+        love.event.quit(0);
+        return;
+     end
+    --  if key == "space" then
+    --     qteView.enabled = not qteView.enabled;
+    --  end
+    for k, Component in pairs(Components) do
+        Component:keypressed(key);
     end
 end
 
-test = {
-    x = 0
-}
-
---test--
-function test:new(x)
-    t = {}
-    setmetatable(t, {__index = self})
-    t.x = x
-    return t
-end
-
-t1 = test:new(2)
---t1.x = 2
-t2 = test:new(3)
---t2.x = 3
-
-function test:print()
-    print(self.x)
+function love.update(dt)
+    for k, Component in pairs(Components) do
+        Component:update(dt);
+    end
 end
