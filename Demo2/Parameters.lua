@@ -112,7 +112,7 @@ enemybullets = {
     id = 4
 }
 
-DamageScreentimerMax = 0.02
+DamageScreentimerMax = 0.065
 DamageScreentimer = DamageScreentimerMax
 
 showCollider = false

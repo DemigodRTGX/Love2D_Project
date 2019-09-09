@@ -41,11 +41,44 @@ function Damege()
                 end
 
                 if enemy.hp < 0 then
-                    Player.score = Player.score + 10
                     table.remove(enemie1renderlist, i)
                     love.audio.stop(enemyDeadaudio)
 
                     love.audio.play(enemyDeadaudio)
+                    if enemy.id == 1 then
+                        Player.score = Player.score + 10
+                        newexp(
+                            exp,
+                            enemy.x + enemy.img:getWidth() * enemy.sx / 2,
+                            enemy.img:getHeight() * enemy.sy / 2 + enemy.y,
+                            0,
+                            0.5,
+                            0.5,
+                            0.05
+                        )
+                    elseif enemy.id == 2 then
+                        Player.score = Player.score + 20
+                        newexp(
+                            exp,
+                            enemy.x + enemy.img:getWidth() * enemy.sx / 2,
+                            enemy.img:getHeight() * enemy.sy / 2 + enemy.y,
+                            0,
+                            0.8,
+                            0.8,
+                            0.05
+                        )
+                    elseif enemy.id == 3 then
+                        Player.score = Player.score + 50
+                        newexp(
+                            exp,
+                            enemy.x + enemy.img:getWidth() * enemy.sx / 2,
+                            enemy.img:getHeight() * enemy.sy / 2 + enemy.y,
+                            0,
+                            1.2,
+                            1.2,
+                            0.05
+                        )
+                    end
                 end
             end
         end
@@ -60,10 +93,42 @@ function DamageScreenUpdate(dt)
         IsDamageScreen = false
         DamageScreentimer = DamageScreentimerMax
     end
+    expupdate(dt)
 end
 
 function DamageScreenDraw()
     if IsDamageScreen == true then
         love.graphics.draw(damageScreenimg)
+    end
+    expdraw()
+end
+
+expeffectlist = {}
+function newexp(img, x, y, r, sx, sy, timer)
+    exptable = {}
+    exptable.img = img
+    exptable.x = x
+    exptable.y = y
+    --exptable.r = love.math.random(0, 180)
+    exptable.sx = sx
+    exptable.sy = sy
+    exptable.timer = timer
+    table.insert(expeffectlist, exptable)
+end
+
+function expupdate(dt)
+    for i, v in ipairs(expeffectlist) do
+        v.sy = v.sy - dt
+        v.sx = v.sx - dt
+        v.timer = v.timer - dt
+    end
+end
+
+function expdraw()
+    for i, v in ipairs(expeffectlist) do
+        love.graphics.draw(v.img, v.x, v.y, v.r, v.sx, v.sy, v.img:getWidth() / 2, v.img:getHeight() / 2)
+        if v.timer < 0 then
+            table.remove(expeffectlist, i)
+        end
     end
 end

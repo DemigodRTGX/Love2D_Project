@@ -17,7 +17,7 @@ function BackgroundDraw(Background)
     bgShader:send('Time', uv_x_move)
     love.graphics.draw(Background.img)
     love.graphics.setShader()
-    
+
     for i, v in ipairs(newBackGroundStoneRender) do
         love.graphics.draw(v.img, v.x, v.y, v.r, v.sx, v.sy)
     end
@@ -92,7 +92,7 @@ end
 
 bulletsRenderlist = {}
 
-function FireAudioPlay()
+function FireAudioPlay(fireaudio)
     love.audio.stop(fireaudio)
     love.audio.play(fireaudio)
 end
@@ -141,7 +141,6 @@ function menu(dt)
         if Player.score < 200 then
             newbullets(bullets, 8, 14)
         elseif Player.score < 400 then
-            -- levelup = true
             if levelupID == 1 then
                 levelupAudio()
                 levelupID = levelupID + 1
@@ -150,7 +149,6 @@ function menu(dt)
             newbullets(bullets, 8, 8)
             newbullets(bullets, 8, 14)
         else
-            levelup = true
             if levelupID == 2 then
                 levelupAudio()
                 levelupID = levelupID + 1
@@ -160,7 +158,7 @@ function menu(dt)
             newbullets(bullets, 8, 14)
             newbullets(bullets, 8, 20)
         end
-        FireAudioPlay()
+        FireAudioPlay(fireaudio)
 
         canShoot = false
     end
@@ -168,11 +166,17 @@ function menu(dt)
     if love.keyboard.isDown('escape') then
         love.event.push('quit')
     end
-    if love.keyboard.isDown('return') and gameover == true then
-        gameover = false
-        IsReset = true
-        isPause = false
-        IsDamageScreen = false
+    if love.keyboard.isDown('return') then
+        if isStartScreen == true and StartScreenFade == 1 then
+            isStartScreen = false
+            love.audio.play(restartaudio)
+        end
+        if gameover == true then
+            gameover = false
+            IsReset = true
+            isPause = false
+            IsDamageScreen = false
+        end
     end
 
     if IsReset == true then
@@ -185,27 +189,34 @@ function menu(dt)
 end
 
 function menuDraw()
-    love.graphics.print('HP:')
-    love.graphics.print(Player.hp, 20, 0)
-    love.graphics.print('Score:', 50, 0)
-    love.graphics.print(Player.score, 120, 0)
-    --gameover
-    if Player.hp <= 0 and gameover == false then
-        Reset()
-        love.audio.play(PlayerDeadaudio)
-        love.graphics.print('Game Over~')
-        gameover = true
-        isPause = true
-    end
-    if gameover then
-        love.graphics.draw(gameoverImg)
-    end
+    if isStartScreen == false then
+        love.graphics.print('HP:')
+        love.graphics.print(Player.hp, 20, 0)
+        love.graphics.print('Score:', 50, 0)
+        love.graphics.print(Player.score, 120, 0)
+        --gameover
+        if Player.hp <= 0 and gameover == false then
+            --   Reset()
+            love.audio.play(PlayerDeadaudio)
+            -- love.graphics.print('Game Over~')
+            gameover = true
+            isPause = true
+            IsDamageScreen = false
+        end
+        if gameover then
+            love.graphics.draw(gameoverImg)
+            love.graphics.setFont(font)
+            love.graphics.print('score:', 60, 140)
+            love.graphics.print(Player.score, 135, 140)
+            love.graphics.setFont(defaultfont)
+        end
 
-    if isPause == true and gameover == false then
-        love.graphics.setColor(0, 0, 0, 0.2)
-        love.graphics.rectangle('fill', 0, 0, 320, 240)
-        love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.print('Pause', 140, 120, 0, 1, 1)
+        if isPause == true and gameover == false then
+            love.graphics.setColor(0, 0, 0, 0.2)
+            love.graphics.rectangle('fill', 0, 0, 320, 240)
+            love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.print('Pause', 140, 120, 0, 1, 1)
+        end
     end
 
     -- love.graphics.print(#enemie1renderlist, 0, 50)
@@ -240,7 +251,10 @@ function loadaudio()
     enemyDeadaudio = love.audio.newSource('sound/EnemyDead.mp3', 'static')
     PlayerDeadaudio = love.audio.newSource('sound/PlayerDead.mp3', 'static')
     restartaudio = love.audio.newSource('sound/Start.mp3', 'static')
+    levelup = love.audio.newSource('sound/LevelUp.mp3', 'static')
+    enemyfire = love.audio.newSource('sound/Enemyfire.mp3', 'static')
 end
+
 IsReset = false
 function love.keyreleased(key)
     if key == 'space' then
@@ -256,8 +270,7 @@ end
 --levelup = false
 levelupID = 1
 function levelupAudio()
-    love.audio.play(restartaudio)
-    -- levelup = false
+    love.audio.play(levelup)
 end
 
 function loadpatricle()
@@ -271,4 +284,16 @@ function loadpatricle()
     psystem:setColors(1, 1, 1, 1, 1, 1, 1, 0) -- Fade to transparency.
     --
     enemyimg = love.graphics.newImage('asset/fireparticle_enemy.png')
+end
+
+function StartScreenUpdate(dt)
+    StartScreenFade = StartScreenFade + dt*0.5
+    StartScreenFade = math.min(StartScreenFade, 1)
+    -- print(StartScreenFade)
+end
+
+function StartScreenDraw()
+    love.graphics.setColor(StartScreenFade, StartScreenFade, StartScreenFade, StartScreenFade)
+    love.graphics.draw(StartScreen)
+    --   love.graphics.setColor(1, 1, 1, 1)
 end

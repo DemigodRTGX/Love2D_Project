@@ -108,7 +108,7 @@ function enemieMove(dt)
                 end
             end
         end
-        if v.x <= 0 - 320 then
+        if v.x < -320 or v.y < -480 or v.y > 240 then
             table.remove(enemie1renderlist, i)
         end
     end
