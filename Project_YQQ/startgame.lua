@@ -12,7 +12,7 @@ function startgameComponents:load(arg)
 
     StartBG = TweenUIimg:new('assets/img/StartBG.png', 0, 0, 0, 1, 1)
     Shift = TweenUIimg:new('assets/img/Shift.png', 0, 245, 0, 1, 1)
-    PressStart = TweenUIimg:new('assets/img/CREDITS.png', 0, 0, 0, 1, 1)
+
     CREDITSimg = love.graphics.newImage('assets/img/PressStart.png')
 
     StartGameAnimation = true
@@ -44,9 +44,15 @@ function startgameComponents:update(dt)
             LoginScreen = true
         end
     end
+
+    --fadebutton
     if LoginScreen == true then
         PressStart:fadesin(dt, 2)
     end
+
+    --EndStartgameScreen
+
+    EndStartgameScreen(dt)
 end
 
 function startgameComponents:draw()
@@ -77,6 +83,9 @@ function startgameComponents:draw()
         DrawFont('CREDITS:', 225, 215, 14, 1, 1, 1, 1)
         DrawFont(CREDITS, 295, 215, 14, 1, 1, 1, 1)
     end
+
+    --EndStartgameScreen
+    EndStartgameScreenDraw()
 end
 
 function startgameComponents:keypressed(k)
@@ -90,15 +99,41 @@ function startgameComponents:keypressed(k)
         PressStart:replace(CREDITSimg)
     end
     if k == 'j' and CREDITS > 0 then
-        LoginScreen = false
+        isfadeoutStart = true
         Store = true
-        Components['qte'].enabled = true
     end
 end
+
 gametime = 0
 function timer(dt)
     gametime = gametime + dt
-    --  print(gametime)
+end
+
+isfadeoutStart = false
+fadeoutStarttime = 1
+
+function EndStartgameScreen(dt)
+    if isfadeoutStart == true then
+        fadeoutStarttime = fadeoutStarttime - dt
+
+        if fadeoutStarttime <= 0 then
+            Components['storyscreen'].enabled = true
+            LoginScreen = false
+        -- startgameComponents.enable = false
+        --  print(fadeoutStarttime)
+        end
+    end
+end
+
+function EndStartgameScreenDraw()
+    if isfadeoutStart == true then
+        if fadeoutStarttime <= 0 then
+            love.graphics.setColor(1, 1, 1, 1)
+        else
+            love.graphics.setColor(0, 0, 0, 1 - fadeoutStarttime)
+            love.graphics.rectangle('fill', 0, 0, 320, 240)
+        end
+    end
 end
 
 return startgameComponents

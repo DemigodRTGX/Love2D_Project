@@ -18,13 +18,18 @@ function TweenUIimg:replace(img)
     self.img = img
 end
 
-d = 0
+local d = 0
 function TweenUIimg:fade(dt, fadetime)
     d = d + dt * fadetime
     d = math.min(1, d)
 
     self.fadetime = d
 
+    if d == 1 then
+        return true
+    else
+        return false
+    end
     --print(self.fadetime)
 end
 
