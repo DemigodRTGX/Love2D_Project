@@ -91,7 +91,7 @@ function startgameComponents:keypressed(k)
     if k == 'return' and LoginScreen == true then
         -- CREDITSAudio = AudioManager:new('assets/audio/CREDITSAudio.mp3', 'static')
         -- CREDITSAudio:PlayAudio()
-        Components["Res"]:PlayAudio("CREDITSAudio",true)
+        Components["Res"]:PlayAudio("CREDITSAudio")
         CREDITS = CREDITS + 1
         PressStart:replace(CREDITSimg)
     end

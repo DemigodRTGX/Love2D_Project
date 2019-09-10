@@ -19,6 +19,11 @@ function TweenUIimg:replace(img)
 end
 
 local d = 0
+
+function TweenUIimg:resetfade()
+    d = 0
+end
+
 function TweenUIimg:fade(dt, fadetime)
     d = d + dt * fadetime
     d = math.min(1, d)
@@ -72,12 +77,11 @@ function TweenUIimg:drawfade()
     love.graphics.setColor(1, 1, 1, self.fadetime)
     love.graphics.draw(self.img, self.x, self.y, self.r, self.sx, self.sy)
     love.graphics.setColor(1, 1, 1, 1)
-
 end
 
 fadesintimer = 0
 function TweenUIimg:fadesin(dt, fadetime)
-    fadesintimer = fadesintimer + dt * fadetime
+    fadesintimer = fadesintimer + dt * fadetime*2
     --fadesintimer = math.sin(fadesintimer)
     -- print(math.sin(fadesintimer))
     self.fadetime = math.abs(math.sin(fadesintimer))
