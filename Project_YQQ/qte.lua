@@ -1,12 +1,19 @@
 local qteView = {}
-qteView.enabled = true;
-qteView.QTETime = 7
 qteView.keys={"up","down","left","right"};
-qteView.keys_tail = {"a","k"};
-qteView.keyImages_tail={"assets/img/A.png","assets/img/B.png"}
-qteView.pressedImages_tail={"assets/img/A_g.png","assets/img/B_g.png"}
-qteView.keyImages = {"assets/img/up.png","assets/img/down.png","assets/img/left.png","assets/img/right.png"}
-qteView.pressedImages = {"assets/img/up_g.png","assets/img/down_g.png","assets/img/left_g.png","assets/img/right_g.png"}
+qteView.keys_tail = {"j"};
+qteView.keyImages_tail={"assets/img/querenanjian1.png"}
+qteView.pressedImages_tail={"assets/img/querenanjian2.png"}
+qteView.keyImages = {"assets/img/anjian-shang.png","assets/img/anjian-xia.png","assets/img/anjian-zuo.png","assets/img/anjian-you.png"}
+qteView.pressedImages = {"assets/img/anjiananxia-shang.png","assets/img/anjiananxia-xia.png","assets/img/anjiananxia-zuo.png","assets/img/anjiananxia-you.png"}
+qteView.OtherImages={};
+qteView.OtherImages["timeOutSlider_bg"]="assets/img/daojishi-di.png";
+qteView.OtherImages["timeOutSlider"]="assets/img/daojishi-tiao.png";
+qteView.OtherImages["keys_bg"]="assets/img/di.png";
+function qteView:Init()
+    qteView.enabled = false;
+    qteView.QTETime = 7
+    qteView.currentRange={}
+end
 -- 定义功能函数
 --创建一个随机的按键
 function qteView:getRandomKey()
@@ -49,20 +56,59 @@ function qteView:nextRange()
 end
 -- Shift=0
 function qteView:succeed()
-    print("succeed");
+    -- print("succeed");
+    qteView.enabled = false;
+    Components["caiQuan"]:ShowResult(-1)
+    -- Components["shift"]:shiftChange(1);
+end
+
+function qteView:Continue(result)
+    if result == 1 then
+        Components["shift"]:shiftChange(1);
+        Components["HP"]:ChangeEnemyHP(-10);
+    else
+        Components["HP"]:ChangeMyHP(-20);
+    end
+    qteView.enabled = true;
+    -- Components["HP"].enabled = false;
+
 end
 function qteView:failed()
-    print("failed");
+    qteView.enabled = false;
+    Components["HP"].enabled = true;
+    Components["chooseGestures"]:Show()
+    -- print("failed");
+end
+function qteView:Start()
+    print('QTE');
+    qteView.currentRange={}
+    qteView.enabled = true;
+    Components["shift"].enabled = true;
+    Components["HP"].enabled = true;
+    qteView:nextRange()
+end
+function qteView:drawTimeSlider()
+    love.graphics.draw(qteView.OtherImages["timeOutSlider_bg"], 15,180);
+    local sliderWidth = 296 * qteView.leftTime/qteView.QTETime;
+    sliderWidth = math.floor(sliderWidth);
+    love.graphics.setScissor(15 + 296 - sliderWidth, 180, sliderWidth, 7)
+    -- scissorWidth = math.floor(296 * );
+    -- scissorWidth = math.floor(296 * (1- qteView.leftTime / qteView.QTETime));
+    -- love.graphics.setScissor(15, 180, scissorWidth, 7)
+    love.graphics.draw(qteView.OtherImages["timeOutSlider"], 15,180);
+    local width, height = love.window.getDesktopDimensions(1)
+    love.graphics.setScissor(0,0,width,height);
 end
 
 function qteView:load()
+    
     -- print("中文");
     love.graphics.setFont(love.graphics.newFont(11))
-    red = 0
-    green = 122/255
-    blue = 204/255
+    red = 215/255
+    green = 108/255
+    blue = 142/255
     alpha = 50/100
-    love.graphics.setBackgroundColor( 0, 0, 0, alpha)
+   -- love.graphics.setBackgroundColor( red, green, blue, alpha)
     --先将图片全部加载进来
     for i=1,table.getn(qteView.keyImages) do
         qteView.keyImages[i] = love.graphics.newImage(qteView.keyImages[i]);
@@ -72,37 +118,34 @@ function qteView:load()
         qteView.keyImages_tail[i] = love.graphics.newImage(qteView.keyImages_tail[i]);
         qteView.pressedImages_tail[i] = love.graphics.newImage(qteView.pressedImages_tail[i]);
     end
-
-    qteView:nextRange()
+    
+    for k, v in pairs(qteView.OtherImages) do
+        qteView.OtherImages[k] = love.graphics.newImage(v);
+    end
 end
 qteView.currentRange = {}
-qteView.imageWidth = 32
-qteView.imagePadding = qteView.imageWidth * 1.2
-qteView.keyImageScale = qteView.imageWidth / 200;
+qteView.imageWidth = 40
+qteView.imagePadding = qteView.imageWidth * 1.1
 function qteView:draw()
-    if not qteView.enabled then
-        return
-    end
+    local y=100
+    --先画背景
+    love.graphics.draw(qteView.OtherImages["keys_bg"], 0 ,y - 20);
+    qteView:drawTimeSlider()
     local keyCount = table.getn(qteView.currentRange);
     lineLength = keyCount * qteView.imagePadding;
     x = math.floor((love.graphics.getWidth() - lineLength)/2)
-    y=100
+    
     for i = 1,keyCount do
         if qteView.currentRange[i].isPressed then
-            love.graphics.draw(qteView.currentRange[i].pressedImage, x+ qteView.imagePadding * (i-1), y,0,qteView.keyImageScale,qteView.keyImageScale)
+            love.graphics.draw(qteView.currentRange[i].pressedImage, x+ qteView.imagePadding * (i-1),y)
         else
-            love.graphics.draw(qteView.currentRange[i].keyImage, x + qteView.imagePadding * (i-1), y,0,qteView.keyImageScale,qteView.keyImageScale)
+            love.graphics.draw(qteView
+            .currentRange[i].keyImage, x + qteView.imagePadding * (i-1),y)
         end
     end
 end
 
 function qteView:keypressed(key)
-    if not qteView.enabled then
-        return
-    end
-    if key == "rctrl" then --set to whatever key you want to use
-        debug.debug()
-     end
     -- print("Pressed_"..key)
     local keyCount = table.getn(qteView.currentRange);
     -- print("keyCount="..keyCount);
@@ -127,9 +170,6 @@ end
 
 qteView.leftTime = qteView.QTETime;
 function qteView:update(dt)
-    if not qteView.enabled then
-        return
-    end
     qteView.leftTime = qteView.leftTime - dt;
     if qteView.leftTime < 0 then
         qteView:failed()
@@ -137,5 +177,5 @@ function qteView:update(dt)
     end
     -- print(leftTime)
 end
-
+qteView:Init()
 return qteView

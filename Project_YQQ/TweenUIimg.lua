@@ -71,6 +71,8 @@ end
 function TweenUIimg:drawfade()
     love.graphics.setColor(1, 1, 1, self.fadetime)
     love.graphics.draw(self.img, self.x, self.y, self.r, self.sx, self.sy)
+    love.graphics.setColor(1, 1, 1, 1)
+
 end
 
 fadesintimer = 0

@@ -2,7 +2,6 @@ local storymode = {}
 storymode.enabled = false
 
 function storymode:load(arg)
-    Components['startgame'].enabled = false
     storymodeimg = TweenUIimg:new('assets/img/story.png', 0, 0, 0, 1, 1)
     fadeoutstory = 1
     isfadein = false
@@ -27,14 +26,16 @@ function storymode:draw()
     if isfadein then
         PressStart:drawfade()
     end
+    -- print('story')
 end
 
 function storymode:keypressed(k)
     if k == 'j' and isfadein then
-        Components['qte'].enabled = true
-        Components['storyscreen'].enabled = false
-     end
-
+        print('battlestart')
+        Components['Battle']:Start()
+        storymode.enabled = false
+      --  love.graphics.
+    end
 end
 
 return storymode
