@@ -137,7 +137,7 @@ function bulletfire(bullets, dt)
 end
 
 function menu(dt)
-    if love.keyboard.isDown('j', 'k') and canShoot and isPause == false then
+    if love.keyboard.isDown('j', 'k') and canShoot and isPause == false and isStartScreen == false then
         if Player.score < 200 then
             newbullets(bullets, 8, 14)
         elseif Player.score < 400 then
@@ -286,14 +286,23 @@ function loadpatricle()
     enemyimg = love.graphics.newImage('asset/fireparticle_enemy.png')
 end
 
+d = 0
+PressStartFade = 0
 function StartScreenUpdate(dt)
-    StartScreenFade = StartScreenFade + dt*0.5
+    StartScreenFade = StartScreenFade + dt * 0.5
     StartScreenFade = math.min(StartScreenFade, 1)
+    if StartScreenFade == 1 then
+        d = d + dt * 2
+        PressStartFade = math.abs(math.sin(d))
+    end
+    --  print(PressStartFade)
     -- print(StartScreenFade)
 end
 
 function StartScreenDraw()
     love.graphics.setColor(StartScreenFade, StartScreenFade, StartScreenFade, StartScreenFade)
     love.graphics.draw(StartScreen)
-    --   love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setColor(1, 1, 1, PressStartFade)
+    love.graphics.draw(PressStartImg, 0, 20)
+    love.graphics.setColor(1, 1, 1, 1)
 end

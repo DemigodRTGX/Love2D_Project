@@ -1,7 +1,7 @@
 local storymode = {}
 storymode.enabled = false
 storymode.storynumber = 0
-
+local isStart = false
 function storymode:load(arg)
     storymodeimg1 = TweenUIimg:new('assets/img/story1.png', 0, 0, 0, 1, 1)
     storymodeimg2 = love.graphics.newImage('assets/img/story2.png')
@@ -12,14 +12,25 @@ function storymode:load(arg)
     isfadein = false
 
     storynumber = 1
+    isStart = false
+end
+
+function storymode:start()
+    if isStart == false then
+        PressStart:replace(contiunebutton)
+        PressStart.y = 0
+        isStart = true
+        print('start storymode')
+    end
 end
 
 function storymode:update(dt)
     if not storymode.enabled then
         return
     end
+    storymode:start()
+
     storymodeimg1:fade(dt, fadeoutstory)
-    PressStart.y = 50
     isfadein = storymodeimg1:fade(dt, fadeoutstory)
     if isfadein then
         PressStart:fadesin(dt, 1)
@@ -55,6 +66,7 @@ function storymode:keypressed(k)
             print('battlestart')
             Components['Battle']:Start()
             storymode.enabled = false
+            isStart = false
         end
     --  love.graphics.
     end

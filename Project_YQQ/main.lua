@@ -7,7 +7,7 @@
 -- start=return
 local BGView = require('bg')
 local qteView = require('qte')
-local Res = require('Res');
+local Res = require('Res')
 
 -- local testcomponents = require("test")
 local startgameComponents = require('startgame')
@@ -18,6 +18,7 @@ local HPView = require('HP')
 local resultView = require('result')
 local Battle = require('Battle')
 local storymode = require('storyscreen')
+local enemyIntroduction = require('enemy')
 
 Components = {}
 --Components['bg'] = BGView
@@ -32,12 +33,14 @@ Components['caiQuan'] = caiQuanView
 Components['result'] = resultView
 Components['HP'] = HPView
 Components['Battle'] = Battle
+Components['enemyIntroduction'] = enemyIntroduction
 function love.load()
     assert(love.filesystem.load('TweenUIimg.lua'))()
     assert(love.filesystem.load('basefunction.lua'))()
     assert(love.filesystem.load('parameters.lua'))()
     assert(love.filesystem.load('AudioManager.lua'))()
     PressStart = TweenUIimg:new('assets/img/CREDITS.png', 0, 0, 0, 1, 1)
+    contiunebutton = love.graphics.newImage('assets/img/continue.png')
 
     -- print(love.window.width)
     for k, Component in pairs(Components) do
@@ -47,6 +50,8 @@ function love.load()
     for i in pairs(Components) do
         print(i)
     end
+
+    --  Components['enemyIntroduction']:show(4)
 end
 
 function love.draw()

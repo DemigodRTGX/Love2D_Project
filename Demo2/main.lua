@@ -10,6 +10,7 @@ function love.load(arg)
     Background.img2 = love.graphics.newImage('asset/background01.png')
     Background.img2:setWrap('repeat', 'repeat')
     StartScreen = love.graphics.newImage('asset/StartScreen.png')
+    PressStartImg = love.graphics.newImage('asset/PressStart.png')
 
     BackgroundStone.img = {
         --love.graphics.newImage('asset/stone01.png'),
@@ -52,7 +53,7 @@ function love.load(arg)
 
     isStartScreen = true
     StartScreenFade = 0
-    love.graphics.setColor(0,0,0,0)
+    love.graphics.setColor(0, 0, 0, 0)
 end
 
 bgtime = 0

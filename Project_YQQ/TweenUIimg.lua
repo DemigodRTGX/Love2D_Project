@@ -30,7 +30,7 @@ function TweenUIimg:fade(dt, fadetime)
 
     self.fadetime = d
 
-    if d == 1 then
+    if d == 1 or d <= -0.1 then
         return true
     else
         return false
@@ -81,7 +81,7 @@ end
 
 fadesintimer = 0
 function TweenUIimg:fadesin(dt, fadetime)
-    fadesintimer = fadesintimer + dt * fadetime*2
+    fadesintimer = fadesintimer + dt * fadetime * 2
     --fadesintimer = math.sin(fadesintimer)
     -- print(math.sin(fadesintimer))
     self.fadetime = math.abs(math.sin(fadesintimer))
