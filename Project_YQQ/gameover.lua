@@ -33,3 +33,5 @@ end
 function gameoverscreen:reset()
     isStart = false
 end
+
+return gameoverscreen

@@ -19,6 +19,7 @@ local resultView = require('result')
 local Battle = require('Battle')
 local storymode = require('storyscreen')
 local enemyIntroduction = require('enemy')
+local gameoverscreen = require('gameover')
 
 Components = {}
 --Components['bg'] = BGView
@@ -34,6 +35,7 @@ Components['result'] = resultView
 Components['HP'] = HPView
 Components['Battle'] = Battle
 Components['enemyIntroduction'] = enemyIntroduction
+Components['gameoverscreen'] = gameoverscreen
 function love.load()
     assert(love.filesystem.load('TweenUIimg.lua'))()
     assert(love.filesystem.load('basefunction.lua'))()
